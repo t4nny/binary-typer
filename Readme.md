@@ -1,33 +1,12 @@
-# chat-app-socket.io
+# RealTime Binary Convertor
 
 
-This is the simple group chat application where user can register them self, and start chatting.
+This is the simple Project for realtime conversion of any text to binary.
 
 ## Getting Started
 
-
-### Installing
-
-* npm install --save
-* Import the users.sql into your mysql and change port as well in database.js
-
-
-## Running the tests
-
-* Edit the Chat.js to change your preferred hosting IP
-
-
-## Deployment
-
-* npm start
-
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+Just got through the link given below and tyoe any text in the text box and everything will be converted to binary in real time. You will also be able to copy binary after finish writing
 
 ## Link To Html File
 
-http://nihalcool.000webhostapp.com/publicRepo/binary_typer.html
+https://bit.do/binary-typer
