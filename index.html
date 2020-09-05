@@ -11,32 +11,37 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<script>
-           
-  $(document).ready(function(){
-    $('#txtplain').keyup(function(){
-      //$('#txtbinary').val($(this).val());
-      convert();
-    });
-    
-  });
-  </script>
 
 
-
+<script src="jquery.min.js.download"></script>
 <script>
 
-function seltext() {
-
+function selBinarytext() {
   var copyText = document.getElementById("txtbinary");
   copyText.select(); 
   copyText.setSelectionRange(0, 99999); 
   document.execCommand("copy");
-  alert("Text Copied");
+  //alert("Text Copied");
 } 
 
+function clrBinarytext() {
+  document.getElementById("txtbinary").value='';
+} 
 
-function convert() {
+function clrPlaintext() {
+ document.getElementById("txtplain").value='';
+  
+} 
+
+function selPlaintext() {
+  var copyText = document.getElementById("txtplain");
+  copyText.select(); 
+  copyText.setSelectionRange(0, 99999); 
+  document.execCommand("copy");
+  //alert("Text Copied");
+} 
+
+function binToText() {
   var output = document.getElementById("txtbinary");
   var input = document.getElementById("txtplain").value;
   output.value = "";
@@ -44,6 +49,49 @@ function convert() {
       output.value += input[i].charCodeAt(0).toString(2) + " ";
   }
 }
+
+
+function textToBin()
+   {
+      var bin = $("#txtbinary").val();
+      var iencode = document.getElementById("charsel").selectedIndex;
+      if( iencode==0 )
+      {
+         bin = bin.replace(/[^0-1]/g,"");
+         bin = bin.match(/[0-1]{8}/g);
+      }
+      else
+         bin = bin.match(/[0-1]*/g).filter(function (el) {
+            return el!="";
+         });
+      var len = bin.length;
+      if( len==0 ) return;
+      var txt='';
+      if( iencode<2 )
+      {
+         for(var i=0; i<len; i++)
+         {
+            var b = bin[i];
+            var code = parseInt(b,2);
+            var t = String.fromCodePoint(code);
+            txt += t;
+         }
+      }
+      else
+      {
+         var encoding = document.getElementById("charsel").value;
+         bin = bin.map(function(item) {
+            return parseInt(item, 2);
+         });
+         var bytes = new Uint8Array(bin);
+         txt = new TextDecoder(encoding, { NONSTANDARD_allowLegacyEncoding: true }).decode(bytes);
+      }
+     
+      document.calcform.txtplain.value = txt;
+   }
+
+
+
 
 </script>
 
@@ -53,7 +101,7 @@ function convert() {
 </head>
  
 <body  style='background-image:url("animation_640_ke5qzxw0.gif");backdrop-filter: blur(5px);'>
-
+  <form class="calc" name="calcform" autocomplete="off">
 <section>
 	<div class="container-fluid" style='color:white'>
         <h1 class="text-center  mb-5 text-uppercase" style='padding-top:110px;'>Binary Typer</h1>
@@ -61,20 +109,29 @@ function convert() {
         <div class="row" >
           <div class="col-sm-3"></div>
             <div class=" col-sm-6" style='margin-bottom:30px;'>
-              
-                  <div class="form-group">				  
-                    <textarea style = "background-color: black; color: lime;" type="text" rows="5" cols="10" id="txtplain" class="form-control" placeholder="Write Plain Text Here"></textarea>					
-                  </div>
-                  <br>
-                  <div class="form-group">
-                    <textarea  style = "background-color: black;  color: lime;" type="text" rows="5" cols="10" id="txtbinary" class="form-control" placeholder="Converted Binary"></textarea>
-                  </div>                  
-                  <button id="button1" type="button" onclick="seltext()"" class="btn btn-dark">Share</button>                 
+             
+                  				  
+                  <textarea style = "background-color: black; color: lime;" type="text" rows="6" cols="80" id="txtplain" name="txtplain" class="form-control" onkeyup="binToText()" placeholder="Write Plain Text Here"></textarea>					
+                  <button id="txtplaincopy" type="button" onclick="selPlaintext()" class="btn btn-dark">Copy</button>   
+                  <button id="txtplainclear" type="button" onclick="clrPlaintext()" class="btn btn-dark">Clear</button>   
+                  
+                  <br><br><br>
+                  <textarea  style = "background-color: black;  color: lime;" type="text" rows="6" cols="80" id="txtbinary" name="txtbinary"  class="form-control" onkeyup="textToBin()" placeholder="Converted Binary"></textarea>
+                  <button id="txtbinarycopy" type="button" onclick="selBinarytext()" class="btn btn-dark">Copy</button>   
+                  <button id="txtbinaryclear" type="button" onclick="clrBinarytext()" class="btn btn-dark">Clear</button>   
+  
+  
+                  <select class="form-control" id="charsel" hidden="true">
+    <option value="">ASCII</option>
+    <option value="utf-8" selected="">ASCII/UTF-8</option>
+   </select>
+	              
               
           </div>
         </div>
     </div>
-	</section>
+  </section>
+  </form>
 	
 </body>
 
